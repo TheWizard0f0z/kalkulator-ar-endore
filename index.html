@@ -152,8 +152,8 @@
       const stage2bTotalReductionNumberIncludingMax = stage1DMGLeftNumberPairingFailed * stage2bTotalReductionPercentMax70 / 100
       const stage2bDamageRemainingAfterStagePercent = stage1DMGLeftPercentPairingFailed - stage1DMGLeftPercentPairingFailed * stage2bTotalReductionPercentMax70 / 100
       const stage2bDamageRemainingAfterStageNumber = stage1DMGLeftNumberPairingFailed * stage2bDamageRemainingAfterStagePercent / 100
-      const stage2bTotalReductionAfterStagePercent = Math.floor(100 - stage2bDamageRemainingAfterStagePercent)
-      const stage2bTotalReductionAfterStageNumber = Math.floor(stage1Dmg - stage2bDamageRemainingAfterStageNumber)
+      const stage2bTotalReductionAfterStagePercent = 100 - stage2bDamageRemainingAfterStagePercent
+      const stage2bTotalReductionAfterStageNumber = stage1Dmg - stage2bDamageRemainingAfterStageNumber
       
       // Ile dała tarcza
       const bonusStageTotalReductionPercent = stage2aTotalReductionAfterStagePercent - stage2bTotalReductionAfterStagePercent
