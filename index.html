@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator AR Endore Middle-Earth</title>
+  <style>
+    body {
+      font-family: 'Cinzel', serif;
+      background: url('https://endoreshard.wordpress.com/wp-content/uploads/2021/04/header1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #f4e9c5;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #e0d69b;
+      text-shadow: 0 0 10px #000, 0 0 20px #6b4226;
+    }
+    #calculator {
+      background: rgba(0, 0, 0, 0.8);
+      border: 5px solid #c69c6d;
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 700px;
+      margin: 20px auto;
+      box-shadow: 0 0 15px #000, 0 0 25px #6b4226;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-size: 1.2rem;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #c69c6d;
+      border-radius: 5px;
+      background-color: #f4e9c5;
+      color: #3e2723;
+      box-shadow: inset 0 0 5px #000;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      color: #f4e9c5;
+      background-color: #6b4226;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #000, 0 0 15px #6b4226;
+    }
+    button:hover {
+      background-color: #8b5e3c;
+      box-shadow: 0 0 20px #000, 0 0 25px #8b5e3c;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      color: #e0d69b;
+      text-shadow: 0 0 10px #000;
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #e0d69b;
+    }
+    footer a {
+      color: #c69c6d;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kalkulator AR Endore Middle-Earth</h1>
+  <div id="calculator">
+    <label for="armorAR">AR pancerza:</label>
+    <input type="number" id="armorAR" placeholder="Wpisz wartość AR pancerza" step="any">
+
+    <label for="dmgBeforeReduction">Obrażenia przed redukcją:</label>
+    <input type="number" id="dmgBeforeReduction" placeholder="Wpisz wartość obrażeń" step="any">
+    
+    <label for="parry">Parowanie:</label>
+    <input type="number" id="parry" placeholder="Wpisz wartość parowania" step="any">
+    
+    <label for="shieldARBonusFromStatus">Ile doszło AR z tarczy w statusie:</label>
+    <input type="number" id="shieldARBonusFromStatus" placeholder="Wpisz bonus AR z tarczy w statusie" step="any">
+    
+    <label for="modifierAR">Modyfikator AR:</label>
+    <input type="number" id="modifierAR" placeholder="1 - bazowy, 2 - aktyw WYTRWAŁOŚĆ, 0.5 - PENETRACJA PANCERZA" step="any">
+
+    <button onclick="calculate()">Oblicz</button>
+
+    <div id="result"></div>
+  </div>
+  <footer>
+    Stworzone dla najodważniejszych poszukiwaczy przygód. 
+    <br> Inspiracja <a href="https://wiki.endore.pl" target="_blank">Endore Middle-Earth</a>.
+  </footer>
+  <script>
+    function calculate() {
+      // Pobierz wartości od użytkownika
+      const armorAR = parseFloat(document.getElementById('armorAR').value) || 0;
+      const dmgBeforeReduction = parseFloat(document.getElementById('dmgBeforeReduction').value) || 0;
+      const parry = parseFloat(document.getElementById('parry').value) || 0;
+      const shieldARBonusFromStatus = parseFloat(document.getElementById('shieldARBonusFromStatus').value) || 0;
+      const modifierAR = parseFloat(document.getElementById('modifierAR').value) || 0;
+
+      // Obliczenia
+      // Etap 1: absolutna redukcja z pancerza
+      const stage1ArmorAR = armorAR * modifierAR
+      const stage1Dmg = dmgBeforeReduction
+      const stage1AbsoluteArmorReductionPercent = stage1ArmorAR * 0.33
+      const stage1AbsoluteArmorReductionNumber = stage1Dmg * stage1AbsoluteArmorReductionPercent / 100
+      
+      // Etap 1: doliczamy absolutną redukcję z tarczy
+      const stage1ProperShieldAR = shieldARBonusFromStatus * (200 / parry) * modifierAR
+      const stage1AbsoluteShieldReductionPercent = stage1ProperShieldAR * 0.33
+      const stage1AbsoluteShieldReductionNumber = stage1Dmg * stage1AbsoluteShieldReductionPercent / 100
+      const stage1DMGLeftPercentSuccessfulPairing = 100 - stage1AbsoluteArmorReductionPercent - stage1AbsoluteShieldReductionPercent
+      const stage1DMGLeftNumberSuccessfulPairing = stage1Dmg * stage1DMGLeftPercentSuccessfulPairing / 100
+      const stage1DMGLeftPercentPairingFailed = 100 - stage1AbsoluteArmorReductionPercent
+      const stage1DMGLeftNumberPairingFailed = stage1Dmg * stage1DMGLeftPercentPairingFailed / 100
+      
+      // Etap 2: udane parowanie - procentowa redukcja
+      const stage2aPercentageReductionPercent = stage1ArmorAR * 0.41
+      const stage2aPercentageReductionNumber = stage1AbsoluteShieldReductionNumber * stage2aPercentageReductionPercent / 100
+      const stage2aFixedPercentReductionPercent = 50 * 0.41
+      const stage2aFixedPercentReductionNumber = stage1DMGLeftNumberSuccessfulPairing * stage2aFixedPercentReductionPercent / 100
+      const stage2aShieldPercentageReductionPercent = stage1ProperShieldAR * 0.41
+      const stage2aShieldPercentageReductionNumber = stage2aShieldPercentageReductionPercent * stage1DMGLeftNumberSuccessfulPairing / 100
+      const stage2aTotalReductionPercentMax70 = Math.min(stage2aPercentageReductionPercent + stage2aFixedPercentReductionPercent + stage2aShieldPercentageReductionPercent, 70)
+      const stage2aTotalReductionNumberIncludingMax = stage1DMGLeftNumberSuccessfulPairing * stage2aTotalReductionPercentMax70 / 100
+      const stage2aDamageRemainingAfterStagePercent = stage1DMGLeftPercentSuccessfulPairing - stage1DMGLeftPercentSuccessfulPairing * stage2aTotalReductionPercentMax70 / 100
+      const stage2aDamageRemainingAfterStageNumber = stage1DMGLeftNumberSuccessfulPairing * stage2aDamageRemainingAfterStagePercent / 100
+      const stage2aTotalReductionAfterStagePercent = Math.floor(100 - stage2aDamageRemainingAfterStagePercent)
+      const stage2aTotalReductionAfterStageNumber = Math.floor(stage1Dmg - stage2aDamageRemainingAfterStageNumber)
+      
+      // Etap 2: nieudane parowanie - procentowa redukcja
+      const stage2bPercentageReductionPercent = stage1ArmorAR * 0.41
+      const stage2bPercentageReductionNumber = stage1DMGLeftNumberPairingFailed * stage2bPercentageReductionPercent / 100
+      const stage2bFixedPercentReductionPercent = 50 * 0.41
+      const stage2bFixedPercentReductionNumber = stage1DMGLeftNumberPairingFailed * stage2aFixedPercentReductionPercent / 100
+      const stage2bTotalReductionPercentMax70 = Math.min(stage2bPercentageReductionPercent + stage2bFixedPercentReductionPercent, 70)
+      const stage2bTotalReductionNumberIncludingMax = stage1DMGLeftNumberPairingFailed * stage2bTotalReductionPercentMax70 / 100
+      const stage2bDamageRemainingAfterStagePercent = stage1DMGLeftPercentPairingFailed - stage1DMGLeftPercentPairingFailed * stage2bTotalReductionPercentMax70 / 100
+      const stage2bDamageRemainingAfterStageNumber = stage1DMGLeftNumberPairingFailed * stage2bDamageRemainingAfterStagePercent / 100
+      const stage2bTotalReductionAfterStagePercent = Math.floor(100 - stage2bDamageRemainingAfterStagePercent)
+      const stage2bTotalReductionAfterStageNumber = Math.floor(stage1Dmg - stage2bDamageRemainingAfterStageNumber)
+      
+      // Ile dała tarcza
+      const bonusStageTotalReductionPercent = stage2aTotalReductionAfterStagePercent - stage2bTotalReductionAfterStagePercent
+      const bonusStageTotalReductionNumber = stage2aTotalReductionAfterStageNumber - stage2bTotalReductionAfterStageNumber
+      
+
+      // Wyświetlenie wyników
+      document.getElementById('result').innerHTML = `
+      	<p>UDANE PAROWANIE</p>
+        <p>Całkowita redukcja: <strong>${stage2aTotalReductionAfterStageNumber} punktów obrażeń (${stage2aTotalReductionAfterStagePercent}%)</strong></p>
+        
+        <p>NIEUDANE PAROWANIE</p>
+        <p>Całkowita redukcja: <strong>${stage2bTotalReductionAfterStageNumber} punktów obrażeń (${stage2bTotalReductionAfterStagePercent}%)</strong></p>
+        
+        <p>ILE DAŁA TARCZA</p>
+        <p><strong>${bonusStageTotalReductionNumber} punktów redukcji obrażeń (${bonusStageTotalReductionPercent}%)</strong></p>
+      `;
+    }
+  </script>
+</body>
+</html>
