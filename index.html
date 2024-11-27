@@ -140,8 +140,8 @@
       const stage2aTotalReductionNumberIncludingMax = stage1DMGLeftNumberSuccessfulPairing * stage2aTotalReductionPercentMax70 / 100
       const stage2aDamageRemainingAfterStagePercent = stage1DMGLeftPercentSuccessfulPairing - stage1DMGLeftPercentSuccessfulPairing * stage2aTotalReductionPercentMax70 / 100
       const stage2aDamageRemainingAfterStageNumber = stage1DMGLeftNumberSuccessfulPairing * stage2aDamageRemainingAfterStagePercent / 100
-      const stage2aTotalReductionAfterStagePercent = Math.floor(100 - stage2aDamageRemainingAfterStagePercent)
-      const stage2aTotalReductionAfterStageNumber = Math.floor(stage1Dmg - stage2aDamageRemainingAfterStageNumber)
+      const stage2aTotalReductionAfterStagePercent = 100 - stage2aDamageRemainingAfterStagePercent
+      const stage2aTotalReductionAfterStageNumber = stage1Dmg - stage2aDamageRemainingAfterStageNumber
       
       // Etap 2: nieudane parowanie - procentowa redukcja
       const stage2bPercentageReductionPercent = stage1ArmorAR * 0.41
